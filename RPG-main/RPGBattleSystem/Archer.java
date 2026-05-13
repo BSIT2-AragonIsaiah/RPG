@@ -8,10 +8,12 @@ package RPGBattleSystem;
  *
  * @author Isaiah Aragon
  */
+
+//Refer to this character
 public class Archer extends Character{
     
-    public Archer(String name, int hp, int maxHp, int attack, int defense, int cooldown) {
-        super(name, 10, 10, 2, 2, 0);
+    public Archer(String name, int hp, int maxHp, int attack, int defense, int mp, int maxMp) {
+        super(name, 20, 20, 5, 3, 50, 50);
     }
     @Override
     public void attack(Character enemy) {
@@ -19,17 +21,24 @@ public class Archer extends Character{
         enemy.takeDamage(getAttack());
 
     }
-
+    //SHOOT
+    
     @Override
     public void useSkill(Character enemy) {
 
-        if(getCooldown() == 0) {
+        if(getMp() <= 20) {
 
-            int magicDamage = getAttack() + 3;
+            int skillDamage = getAttack() + 3;
 
-            enemy.takeDamage(magicDamage);
+            enemy.takeDamage(skillDamage);
 
-            setCooldown(3);
+            setMp(getMp() - 20);
         }
+    }
+    
+    //Passive - Avoid taking damage for the first 2 turns
+    @Override
+    public void passiveSkill(Character player){
+        player.takeDamage(0);
     }
 }

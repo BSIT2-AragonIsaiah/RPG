@@ -12,7 +12,7 @@ public class Items extends Character{
     
     public void useHealpot(Character player) {
 
-        player.takeheal(5);
+        player.takeHP(5);
     }
     public void useUtilpot(Character player) {
 
@@ -20,6 +20,6 @@ public class Items extends Character{
     }
     public void useMppot(Character player) {
 
-        player.moveCooldwn();
+        player.takeMP(getMaxMp() + (getMaxMp() * 20));
     }
 }

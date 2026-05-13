@@ -15,15 +15,17 @@ public abstract class Character{
     private int maxHp;
     private int attack;
     private int defense;
-    private int cooldown;
+    private int mp;
+    private int maxMp;
 
-    public Character(String name, int hp, int maxHp, int attack, int defense, int cooldown) {
+    public Character(String name, int hp, int maxHp, int attack, int defense, int mp, int maxMp) {
         this.name = name;
         this.hp = hp;
         this.maxHp = hp;
         this.attack = attack;
         this.defense = defense;
-        this.cooldown = cooldown;
+        this.mp = mp;
+        this.maxMp = maxMp;
     }
 
     //getters
@@ -47,17 +49,20 @@ public abstract class Character{
         return defense;
     }
 
-    public int getCooldown() {
-        return cooldown;
+    public int getMp() {
+        return mp;
     }
 
+    public int getMaxMp() {
+        return maxMp;
+    }
     //setters
     public void setHp(int hp) {
         this.hp = hp;
     }
 
-    public void setCooldown(int cooldown) {
-        this.cooldown = cooldown;
+    public void setMp(int mp) {
+        this.mp = mp;
     }
     
     //commons
@@ -75,24 +80,22 @@ public abstract class Character{
         }
     }
     
-    public void takeHeal(int heal){
+    public void takeHP(int heal){
         
         if(hp != 0) {
             hp += heal;
         }
     }
     
-    public void moveCooldwn(){
+    public void takeMP(int mana){
         
-        if(cooldown != 0) {
-            cooldown -= 1;
-        }
+        mp += mana;
     }
     
     public void boost(){
         
-        attack += 2;
-        defense += 2;
+        attack *= 2;
+        defense *= 2;
     }
     
     
@@ -100,6 +103,11 @@ public abstract class Character{
     public abstract void attack(Character enemy);
     public abstract void useSkill(Character enemy);
     
+    
+    //
+    public void passiveSkill(Character player){
+        
+    }
 //    public abstract void useHealpot(Character player);
 //    public abstract void useUtilpot(Character player);
 //    public abstract void useMppot(Character player);

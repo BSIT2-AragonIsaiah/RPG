@@ -9,8 +9,13 @@ package RPGBattleSystem;
  * @author Isaiah Aragon
  */
 public class Bulwark extends Character{
-    public Bulwark(String name, int hp, int maxHp, int attack, int defense, int cooldown) {
-        super(name, 10, 10, 1, 4, 0);
+    public Bulwark(String name, int hp, int maxHp, int attack, int defense, int mp, int maxMp) {
+        super(name, 40, 40, 1, 10, 50, 50);
+    }
+    public int defenseUp()
+    {
+        int tempDefense = getDefense() * 2;
+        return tempDefense;
     }
     @Override
     public void attack(Character enemy) {
@@ -22,13 +27,19 @@ public class Bulwark extends Character{
     @Override ///COUNTER (DEF*2 ==> Attack)
     public void useSkill(Character enemy) {
 
-        if(getCooldown() == 0) {
+        if(getMp() <= 30) {
 
             int counter = getDefense() * 2;
 
             enemy.takeDamage(counter);
 
-            setCooldown(2);
+            setMp(getMp() - 30);
         }
+    }
+    
+    //Passive - Boost defense if health is below 25%
+    @Override
+    public void passiveSkill(Character player){
+        player.takeDamage();
     }
 }

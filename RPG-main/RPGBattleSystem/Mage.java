@@ -10,8 +10,8 @@ package RPGBattleSystem;
  */
 public class Mage extends Character{
 
-    public Mage(String name, int hp, int maxHp, int attack, int defense, int cooldown) {
-        super(name, 10, 10, 2, 2, 0);
+    public Mage(String name, int hp, int maxHp, int attack, int defense, int mp, int maxMp) {
+        super(name, 30, 30, 4, 2, 100, 100);
     }
     @Override
     public void attack(Character enemy) {
@@ -19,17 +19,16 @@ public class Mage extends Character{
         enemy.takeDamage(getAttack());
 
     }
-
     @Override
     public void useSkill(Character enemy) {
 
-        if(getCooldown() == 0) {
+        if(getMp() <= 40) {
 
-            int magicDamage = getAttack() + 3;
+            int magicDamage = getAttack() * 3;
 
             enemy.takeDamage(magicDamage);
 
-            setCooldown(3);
+            setMp(getMp() - 40);
         }
     }
 }
