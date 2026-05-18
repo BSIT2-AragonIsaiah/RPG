@@ -4,32 +4,64 @@
  */
 package RPGBattleSystem;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Isaiah Aragon
  */
-public class Mage extends Character_Sheet{
+public class Mage extends Character {
 
-    public Mage(String name, int hp, int maxHp, int attack, int defense, int cooldown) {
-        super(name, 10, 10, 2, 2, 0);
+    
+    static {
+        CharacterFactory.register("Mage", Mage::new);
     }
-    @Override
-    public void attack(Character_Sheet enemy) {
-
-        enemy.takeDamage(getAttack());
-
+            
+    public Mage(String name) {
+        super(name, 30, 100, 6, 1);
     }
 
     @Override
-    public void useSkill(Character_Sheet enemy) {
+    public int attack(Character enemy) {
+        int damage = getAttack();
+        
+        int beforeHp = enemy.getHp();
+        enemy.takeDamage(damage);
+        int finalDamage = beforeHp - enemy.getHp();
+        
+        return finalDamage;
+    }
 
-        if(getCooldown() == 0) {
+    // Skill: Fireball (high damage, costs 80 MP)
+    @Override
+    public int useSkill(Character enemy) {
 
-            int magicDamage = getAttack() + 3;
+        int cost = 80;
 
+        if (getMp() >= cost) {
+
+            int magicDamage = getAttack() * 4;
+            
+            int beforeHp = enemy.getHp();
             enemy.takeDamage(magicDamage);
+            int finalDamage = beforeHp - enemy.getHp();
+            
+            useMana(cost);
 
-            setCooldown(3);
+            return finalDamage;
+        } else {
+            JOptionPane.showMessageDialog(null, "Not enough MP!");
+            return 0;
         }
+    }
+
+    // Passive: More Regenerate extra MP each turn
+    @Override
+    public void passive() {
+        restoreMana(8);
+    }
+    @Override
+    public String getImagePath() {
+        return "/RPGBattleSystem/assets/mage.png";
     }
 }

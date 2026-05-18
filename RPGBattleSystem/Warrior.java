@@ -4,32 +4,58 @@
  */
 package RPGBattleSystem;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Isaiah Aragon
  */
-public class Warrior extends Character_Sheet{
+public class Warrior extends Character {
+
     
-    public Warrior(String name, int hp, int maxHp, int attack, int defense, int cooldown) {
-        super(name, 10, 10, 3, 3, 0);
+    static {
+        CharacterFactory.register("Warrior", Warrior::new);
     }
-    @Override
-    public void attack(Character_Sheet enemy) {
+    
+    public Warrior(String name) {
+        super(name, 50, 30, 4, 4);
+    }
 
+    @Override
+    public int attack(Character enemy) {
+        int beforeHp = enemy.getHp();
         enemy.takeDamage(getAttack());
+        return beforeHp - enemy.getHp();
+    }
 
+    
+    // Skill: Power Strike (costs 10 MP)
+    @Override
+    public int useSkill(Character enemy) {
+        int cost = 10;
+
+        if (getMp() < cost) {
+            JOptionPane.showMessageDialog(null, "Not enough MP!");
+            return 0;
+        }
+
+        useMana(cost);
+
+        int beforeHp = enemy.getHp();
+        enemy.takeDamage(getAttack() * 2);
+        return beforeHp - enemy.getHp();
     }
 
     @Override
-    public void useSkill(Character_Sheet enemy) {
-
-        if(getCooldown() == 0) {
-
-            int magicDamage = getAttack() + 3;
-
-            enemy.takeDamage(magicDamage);
-
-            setCooldown(3);
+    public void passive() {
+        if (getHp() <= getMaxHp() / 2) {
+            increaseAttack(2);
         }
+        restoreMana(2);
+    }
+    
+    @Override
+    public String getImagePath() {
+        return "/RPGBattleSystem/assets/warrior.png";
     }
 }

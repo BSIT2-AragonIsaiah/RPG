@@ -10,19 +10,17 @@ import javax.swing.JOptionPane;
  *
  * @author Isaiah Aragon
  */
-
-//Refer to this character
-public class Archer extends Character {
-
+public class Normie extends Character {
+// TESTING DUMMY
     
     static {
-        CharacterFactory.register("Archer", Archer::new);
+        CharacterFactory.register("Normie", Normie::new);
     }
     
     private int dodgeTurns = 2;
 
-    public Archer(String name) {
-        super(name, 20, 50, 5, 3);
+    public Normie(String name) {
+        super(name, 999, 999, 999, 999);
     }
 
     @Override
@@ -36,7 +34,7 @@ public class Archer extends Character {
     // Skill: Double Shot (costs 20 MP)
     @Override
     public int useSkill(Character enemy) {
-        int cost = 20;
+        int cost = 1;
 
         if (getMp() < cost) {
             JOptionPane.showMessageDialog(null, "Not enough MP!");
@@ -46,30 +44,14 @@ public class Archer extends Character {
         useMana(cost);
 
         int beforeHp = enemy.getHp();
-        enemy.takeDamage(getAttack() * 3);
+        enemy.takeDamage(getAttack() * 99);
         return beforeHp - enemy.getHp();
     }
 
-    
-    //Avoids the initial two turns
-    @Override
-    public void takeDamage(int damage) {
-        if (dodgeTurns > 0) {
-            dodgeTurns--;
-            JOptionPane.showMessageDialog(null, getName() + " dodged!");
-            return;
-        }
-
-        super.takeDamage(damage);
-    }
 
     @Override
     public void passive() {
-         restoreMana(2);
+         restoreMana(999);
     }
     
-    @Override
-    public String getImagePath() {
-        return "/RPGBattleSystem/assets/archer.png";
-    }
 }

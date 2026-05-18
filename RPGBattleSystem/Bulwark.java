@@ -4,31 +4,74 @@
  */
 package RPGBattleSystem;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Isaiah Aragon
  */
-public class Bulwark extends Character_Sheet{
-    public Bulwark(String name, int hp, int maxHp, int attack, int defense, int cooldown) {
-        super(name, 10, 10, 1, 4, 0);
+public class Bulwark extends Character {
+
+    
+    static {
+        CharacterFactory.register("Bulwark", Bulwark::new);
     }
+    
+    private boolean counterReady = false;
+
+    public Bulwark(String name) {
+        super(name, 60, 50, 3, 10);
+    }
+
     @Override
-    public void attack(Character_Sheet enemy) {
-
+    public int attack(Character enemy) {
+        int beforeHp = enemy.getHp();
         enemy.takeDamage(getAttack());
-
+        return beforeHp - enemy.getHp();
     }
 
-    @Override ///COUNTER (DEF*2 ==> Attack)
-    public void useSkill(Character_Sheet enemy) {
+    // Skill: Bide Stance (cost 40 MP)
+    @Override
+    public int useSkill(Character enemy) {
+        int cost = 40;
 
-        if(getCooldown() == 0) {
-
-            int counter = getDefense() * 2;
-
-            enemy.takeDamage(counter);
-
-            setCooldown(2);
+        if (getMp() < cost) {
+            JOptionPane.showMessageDialog(null, "Not enough MP!");
+            return 0;
         }
+
+        useMana(cost);
+        counterReady = true;
+
+        return 0;
+    }
+
+    @Override
+    public void takeDamage(int damage) {
+        if (counterReady) {
+            damage /= 2;
+
+            JOptionPane.showMessageDialog(null,
+                getName() + " blocked and reduced damage!"
+            );
+
+            counterReady = false;
+        }
+
+        super.takeDamage(damage);
+    }
+
+    //Bolster when health is low
+    @Override
+    public void passive() {
+        if (getHp() <= getMaxHp() / 6) {
+            increaseDefense(3);
+        }
+         restoreMana(2);
+    }
+    
+    @Override
+    public String getImagePath() {
+        return "/RPGBattleSystem/assets/bulwark.png";
     }
 }
